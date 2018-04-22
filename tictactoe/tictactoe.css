@@ -1,0 +1,30 @@
+#mainContainer {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  //display: flex;
+  //justify-content: center;
+  //align-items: center;
+}
+
+#gameBoard {
+  //color: #f00;
+  //position: absolute;
+  //display: inline-block;
+  width: 440px;
+  height: auto;
+  margin-top: 20px;
+  margin-left: 15px; 
+}
+
+.cell {
+  width: 120px;
+  height: 120px;
+  margin: 4px 4px 4px 2px; 
+  background-color: #34495E;
+  border: none;
+  color: #DCDCDC;
+  border-radius: 4px;
+}
+
