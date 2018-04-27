@@ -48,7 +48,7 @@ function minimax(curBoard, curPlayer)  {
     }
     move.score = result.score;
 
-    // Reset the square to undefined
+    // Reset the square back to empty state
     curBoard[emptySquares[i].x][emptySquares[i].y] = '';
     allMoves.push(move);
   }
@@ -56,45 +56,31 @@ function minimax(curBoard, curPlayer)  {
   // Select the best move according to the curPlayer:
   // if curPlayer is MACH, get the move with the highest score
   // if curPlayer is HMAN, get the move with the lowest score 
-  var bestMoveIndex;
+  var bestMove;
   if (curPlayer == MACH_SYMBOL)  {
-    bestScore = -1000;
-    for(var k = 0; k < allMoves.length; k++ ) {
-      if ( allMoves[k].score > bestScore )  {
-        bestMoveIndex = k;
-        bestScore = allMoves[k].score;
-      }
-    }
   
-    /*bestMove = allMoves.reduce(function(acc, curMove)  {
+    bestMove = allMoves.reduce(function(acc, curMove)  {
       if (curMove.score > acc.score)  {
         return curMove;
       } else {
         return acc;
       }
-    }, {score:-1000});*/
+    }, {score:-1000});
   } else {
-    bestScore = 1000;
-    for(var k = 0; k < allMoves.length; k++ ) {
-      if ( allMoves[k].score < bestScore )  {
-        bestMoveIndex = k;
-        bestScore = allMoves[k].score;
-      }
-    }
 
-     /*bestMove = allMoves.reduce(function(acc, curMove)  {
+    bestMove = allMoves.reduce(function(acc, curMove)  {
       if (curMove.score < acc.score)  {
         return curMove;
       } else {
         return acc;
       }
-    }, {score:1000});*/
+    }, {score:1000});
   }
 
-  return allMoves[bestMoveIndex];
+  return bestMove;
 }
 
-function copy(origBoard)  {
+function copyBoard(origBoard)  {
   var copy =  new Array(origBoard.length);
   for(var i = 0; i < origBoard.length; i++)  {
     copy[i] = new Array(origBoard[i].length);
@@ -105,12 +91,30 @@ function copy(origBoard)  {
   return copy;
 }
 
+function clearBoard(board)  {
+  for(var i = 0; i < board.length; i++)  {
+    for(var j = 0; j < board[i].length; j++)  {
+      board[i][j] = '';
+      $(`button[data-x='${i}'][data-y='${j}']`).text('');
+    }
+  } 
+}
+
 function machPlay() {
   FC = 0;
   console.log("machine playing");
-  var boardCopy = copy(GAMEBOARD);
+  var boardCopy = copyBoard(GAMEBOARD);
 
   var bestMove = minimax(boardCopy, MACH_SYMBOL);
+  if (typeof bestMove.x == 'undefined' && typeof bestMove.y == 'undefined' &&
+      bestMove.score == 0 )  {
+    console.log("It's a tie.");
+    $("#resultDialogContent").html("It's a tie.");
+    $("#resultDialog").modal('show');
+    clearInterval(SESSION_ID);
+    return;
+  }
+
   var randX = bestMove.x;
   var randY = bestMove.y;
   console.log(`bestMove = ${bestMove.x} , ${bestMove.y}, ${bestMove.score}`);
@@ -125,15 +129,21 @@ function machPlay() {
   }*/
   
   GAMEBOARD[randX][randY] = MACH_SYMBOL;
-  var cell = $(`button[data-x='${randX}'][data-y='${randY}']`).html(MACH_SYMBOL);
+  var cell = $(`button[data-x='${randX}'][data-y='${randY}']`).text(MACH_SYMBOL);
   if (cell.length > 0)  {
     console.log(`cell = ${cell}`);
   }
   console.log(`randX, randY = ${randX}, ${randY}`);
+  IS_MACH_TURN = false;
+
   if(isAWin(GAMEBOARD, MACH_SYMBOL))  {
     console.log('MACH wins!');
+    $("#resultDialogContent").html("Machine wins.");
+    $("#resultDialog").modal('show');
+    clearInterval(SESSION_ID);
+    return;
   }
-  IS_MACH_TURN = false;
+
 }
 
 function startGame() {
@@ -155,14 +165,26 @@ function init() {
   
   IS_MACH_TURN = false;
   
-  // Declare game board
+  // Declare and init game board
   GAMEBOARD = new Array(BOARD_LENGTH);
   for (var i = 0; i < GAMEBOARD.length; i++) {
     GAMEBOARD[i] = new Array(BOARD_LENGTH);
     for (var j = 0; j < BOARD_LENGTH; j++)  {
       GAMEBOARD[i][j] = '';
     }
-  }  
+  }
+
+  $("#symbolSelector").bootstrapSwitch({
+    onSwitchChange: function(e, state) {
+      console.log(`switch toggling: ${state}`);
+      HMAN_SYMBOL  = (state ? 'X' : 'O' ); 
+      MACH_SYMBOL  = (state ? 'O' : 'X');
+    }
+  });
+  $("#symbolSelector").bootstrapSwitch('state', true);
+
+  $('#startModalDialog').modal('show'); 
+  $('#resultDialog').modal('hide');  
 }
 
 function isAWin(board, symbol) {
@@ -213,20 +235,12 @@ $(document).ready(function() {
     }
     
     GAMEBOARD[x][y] = HMAN_SYMBOL;
-    $(this).html(HMAN_SYMBOL);
-    /*
-    for(var i = 0; i < GAMEBOARD.length; i++) {
-      for (var j = 0; j < GAMEBOARD[i].length; j++)  {
-        console.log(`GAMEBOARD[${i}][${j}] = ${GAMEBOARD[i][j]}`);
-      }
-    }*/
-    
-    
+    $(this).text(HMAN_SYMBOL); //html(HMAN_SYMBOL);
     IS_MACH_TURN = true;
   });
        
   $("#startGame").click(function(event)  {
-    
+    $('#startModalDialog').modal('hide');  
     SESSION_ID = setInterval(startGame, 1000);
   });
 
@@ -235,6 +249,10 @@ $(document).ready(function() {
     console.log("Game cancelled.");
   });
 
-  
-
+  $("#replayGame").click(function(event)  {
+    clearBoard(GAMEBOARD);
+    IS_MACH_TURN = false;
+    $('#resultDialog').modal('hide');  
+    SESSION_ID = setInterval(startGame, 1000);
+  });
 });

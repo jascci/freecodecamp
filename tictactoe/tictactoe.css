@@ -1,3 +1,8 @@
+body {
+  //font-family: 'Homemade Apple', cursive;
+  font-family: 'Cabin Sketch', cursive;
+}
+
 #mainContainer {
   padding-right: 15px;
   padding-left: 15px;
@@ -12,19 +17,33 @@
   //color: #f00;
   //position: absolute;
   //display: inline-block;
-  width: 440px;
+  width: 460px;
   height: auto;
-  margin-top: 20px;
-  margin-left: 15px; 
+  margin: 20px;
+  //margin-left: 20px;
+  background: url("https://cui.unige.ch/~chopard/joanna/gameboard_v2_plain.svg") no-repeat; 
+  background-size: 700px;
 }
 
 .cell {
-  width: 120px;
-  height: 120px;
-  margin: 4px 4px 4px 2px; 
+  width: 140px;
+  height: 140px;
+  margin: 5px 5px 5px 5px; 
   background-color: #34495E;
   border: none;
   color: #DCDCDC;
   border-radius: 4px;
+  //font-family: 'Finger Paint', cursive;
+  font-size: 60px;
+  opacity: 0.5;
 }
+
+.modal-title {
+  //margin: 0 auto;
+}
+
+.modal-footer {
+  margin: 0 auto;
+}
+
 

@@ -1,26 +1,75 @@
 <head>
+  <link href="https://fonts.googleapis.com/css?family=Finger+Paint" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Homemade+Apple" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Cabin+Sketch:700" rel="stylesheet">
 </head>
 <body>
   <div id="mainContainer" class="d-flex flex-column justify-content-center align-items-center bg-primary">
+    <div class="mt-3 bg-info">
+      <h1>TIC-TAC-TOE</h1>
+    </div>
 
     <div id="gameBoard" class="mt-5 bg-secondary">
-      <button class="cell" data-x='0', data-y='0'>0, 0</button>
-      <button class="cell" data-x='1', data-y='0'>1, 0</button>
-      <button class="cell" data-x='2', data-y='0'>2, 0</button>
-      <button class="cell" data-x='0', data-y='1'>0, 1</button>
-      <button class="cell" data-x='1', data-y='1'>1, 1</button>
-      <button class="cell" data-x='2', data-y='1'>2, 1</button>     
-      <button class="cell" data-x='0', data-y='2'>0, 2</button>
-      <button class="cell" data-x='1', data-y='2'>1, 2</button>
-      <button class="cell" data-x='2', data-y='2'>2, 2</button>       
+      <button type="button" class="btn cell" data-x='0', data-y='0'></button>
+      <button type="button" class="btn cell" data-x='1', data-y='0'></button>
+      <button type="button" class="btn cell" data-x='2', data-y='0'></button>
+      <button type="button" class="btn cell" data-x='0', data-y='1'></button>
+      <button type="button" class="btn cell" data-x='1', data-y='1'></button>
+      <button type="button" class="btn cell" data-x='2', data-y='1'></button>     
+      <button type="button" class="btn cell" data-x='0', data-y='2'></button>
+      <button type="button" class="btn cell" data-x='1', data-y='2'></button>
+      <button type="button" class="btn cell" data-x='2', data-y='2'></button>       
     </div>
 
     
-    <button id="startGame" type="button" class="btn btn-success">PLAY</button>
+    <button id="pauseGame" type="button" class="btn btn-success">PAUSE</button>
     <button id="cancelGame" type="button" class="btn btn-success">CANCEL</button>
 
     <input id="xoSelector" type="checkbox"  data-on-color="secondary" data-off-color="warning" data-on-text="X" data-off-text="O">
     
 
   </div>
+
+  <!-- Modal: startDialog -->
+  <div class="modal fade" id="startModalDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content text-center">
+        <div class="modal-header">
+          <h5 class="modal-title text-center" id="exampleModalLongTitle">Tic-Tac-Toe</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Select your symbol</p>
+          <input id="symbolSelector" type="checkbox"  data-on-color="primary"
+data-off-color="success" data-on-text="X" data-off-text="O">
+        </div>
+        <div class="modal-footer">
+          <button id="startGame" type="button" class="btn btn-primary">PLAY</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: resultDialog -->
+  <div class="modal fade" id="resultDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content text-center">
+        <div class="modal-header">
+          <h5 class="modal-title text-center" id="exampleModalLongTitle">Tic-Tac-Toe</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="resultDialogContent"></p>
+        </div>
+        <div class="modal-footer">
+          <button id="replayGame" type="button" class="btn btn-primary">REPLAY</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
