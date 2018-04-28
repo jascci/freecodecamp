@@ -154,14 +154,6 @@ function startGame() {
 }
 
 function init() {
-  $("#xoSelector").bootstrapSwitch({
-    onSwitchChange: function(e, state) {
-      console.log(`switch toggling: ${state}`);
-      HMAN_SYMBOL  = (state ? 'X' : 'O' ); 
-      MACH_SYMBOL  = (state ? 'O' : 'X');
-    }
-  });
-  $("#xoSelector").bootstrapSwitch('state', true);
   
   IS_MACH_TURN = false;
   
