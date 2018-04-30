@@ -227,7 +227,7 @@ $(document).ready(function() {
     }
     
     GAMEBOARD[x][y] = HMAN_SYMBOL;
-    $(this).text(HMAN_SYMBOL); //html(HMAN_SYMBOL);
+    $(this).text(HMAN_SYMBOL); 
     IS_MACH_TURN = true;
   });
        
