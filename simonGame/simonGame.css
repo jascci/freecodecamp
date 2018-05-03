@@ -1,0 +1,35 @@
+#mainContainer {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#title {
+  font-size: 60px;
+  color: rgb(255,255,255);
+}
+
+#gameDevice {
+  width: 460px;
+  height: auto;
+  margin: 20px;
+  background: url("https://cui.unige.ch/~chopard/joanna/gameboard.svg") no-repeat; 
+  background-size: 700px;
+}
+
+.cell {
+  width: 210px;
+  height: 210px;
+  margin: 5px 5px 5px 5px; 
+  //background-color: rgba(0,0,0,0); //#34495E;
+  //border: none;
+  //color: #DCDCDC;
+  border-radius: 4px;
+  //font-family: 'Finger Paint', cursive;
+  font-size: 60px;
+  opacity: 1.0;
+}
+
+
+
