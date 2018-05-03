@@ -2,33 +2,37 @@ var NUM_CUR_STEPS;
 var SESSION_ID;
 var IS_SIMON_TURN;
 var IS_HUMAN_TURN;
-var TUNE_SERIES;
-var TUNE_MIN = 1;
-var TUNE_MAX = 4;
-
-function playTune(tune)  {
-  if ( tune == '1' )  {
-    $('#audio1')[0].load()
-    $('#audio1')[0].play();
-    $('#audio1')[0].currentTime=0;
-  } else if ( tune == '2' )  {
-    $('#audio2')[0].load()
-    $('#audio2')[0].play();
-    $('#audio2')[0].currentTime=0;
-  } else if ( tune == '3' )  {
-    $('#audio3')[0].load()
-    $('#audio3')[0].play();
-    $('#audio3')[0].currentTime=0;
-  } else if ( tune == '4' )  {
-    $('#audio4')[0].load()
-    $('#audio4')[0].play();
-    $('#audio4')[0].currentTime=0;
-  } 
-
-}
+var SIMON_SERIES;
+var HUMAN_SERIES;
+var PLAYLIST;
+var TUNE_MIN = 0;
+var TUNE_MAX = 3;
+var AUDIOS = [
+  "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3",
+  "https://s3.amazonaws.com/freecodecamp/simonSound2.mp3",
+  "https://s3.amazonaws.com/freecodecamp/simonSound3.mp3",
+  "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"
+];
 
 function playNext() {
   console.log("audio ended.  playing next");
+  if (PLAYLIST.length)  {
+    var audioPlayer = $('#audioPlayer')[0];
+    audioPlayer.src = AUDIOS[PLAYLIST.shift()];
+    audioPlayer.load();
+    audioPlayer.play();
+  }
+}
+
+function checkInput() {
+  // Beep if user input is too slow
+  if ( arraysEqual(SIMON_SERIES, HUMAN_SERIES) ) {
+    console.log("you got it right");
+  } else {
+    console.log("wrong. try again");
+  }
+  IS_SIMON_TURN = true;
+  
 }
 
 function startGame() {
@@ -38,44 +42,19 @@ function startGame() {
     for (var i=0; i < NUM_CUR_STEPS; i++)  {
       var rand = getRandomTune();
       console.log(`rand = ${rand}`);
-      TUNE_SERIES.push(rand);
+      SIMON_SERIES.push(rand);
     }
+    PLAYLIST = SIMON_SERIES.slice();
+    console.log(`PLAYLIST = ${PLAYLIST}`);
     // play tune series
-    
-    var audioPlayer = $('#audioPlayer')[0];
-    audioPlayer.src = "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3";
-    audioPlayer.load();
-    audioPlayer.play();
-    /*
-    
+    playNext();
 
-    var j = 0;
-    var curAudio = $(`#audio${TUNE_SERIES[j]}`)[0];
-    curAudio.load()
-    curAudio.play();
-    curAudio.currentTime=0;
-
-    curAudio.onended = function(){ 
-      // play next
-      console.log(`audio ${j} has ended.`);
-      j++;
-      var nextAudio =  $(`#audio${TUNE_SERIES[j]}`)[0];
-      nextAudio.load()
-      nextAudio.play();
-      nextAudio.currentTime = 0;
-    };*/
-    /*
-    while ( j < TUNE_SERIES.length )  {
-      //var curAudio = $(`'audio[data-id]="${TUNE_SERIES[j]}"'`);
-      var curAudio = $(`#audio${TUNE_SERIES[j]}`);
-      console.log(`curAudio length = ${curAudio.length}`);
-      j++;
-    }*/
-    /*TUNE_SERIES.forEach(function(tune)  {
-      playTune(tune);
-    });*/
 
     IS_SIMON_TURN = false;
+    // wait for human inputs, with a timeout
+    setTimeout(checkInput, 10000);
+  } else {
+
 
   }
 }
@@ -86,45 +65,42 @@ function getRandomTune() {
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
 }
 
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length != b.length) return false;
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
 function init() {
   NUM_CUR_STEPS = 5;
   IS_SIMON_TURN = true;
-  TUNE_SERIES = [];
+  SIMON_SERIES = [];
+  PLAYLIST = [];
+  HUMAN_SERIES = [];
 }
 
 $(document).ready(function() {
   init();
-  
 
-
-  $("#redButton").click(function(event) {  
-    var buttonColor = $(this).data('color');
-    console.log(`color = ${buttonColor}`);
-    $('#audio1')[0].load()
-    $('#audio1')[0].play();
-    //$('#audio1')[0].pause();
-    $('#audio1')[0].currentTime=0;
-  });
-  $("#greenButton").click(function(event) {  
-    var buttonColor = $(this).data('color');
-    console.log(`color = ${buttonColor}`);
-    $('#audio2')[0].load()
-    $('#audio2')[0].play();
-    $('#audio2')[0].currentTime=0;
-  });
-  $("#blueButton").click(function(event) {  
-    var buttonColor = $(this).data('color');
-    console.log(`color = ${buttonColor}`);
-    $('#audio3')[0].load()
-    $('#audio3')[0].play();
-    $('#audio3')[0].currentTime=0;
-  });
-  $("#yellowButton").click(function(event) {  
-    var buttonColor = $(this).data('color');
-    console.log(`color = ${buttonColor}`);
-    $('#audio4')[0].load()
-    $('#audio4')[0].play();
-    $('#audio4')[0].currentTime=0;
+  $(".cell").click(function(event) {  
+    var pos = $(this).data('position');
+    HUMAN_SERIES.push(pos);
+    
+    /*
+    if (HUMAN_SERIES.length == SIMON_SERIES.length)  {
+      // check series
+      if ( arraysEqual(SIMON_SERIES, HUMAN_SERIES) ) {
+        console.log("you got it right");
+      } else {
+        console.log("wrong. try again");
+      }
+      IS_SIMON_TURN = true;
+    }*/
   });
 
   $("#startGame").click(function(event)  {
@@ -136,10 +112,10 @@ $(document).ready(function() {
     console.log("Game cancelled.");
   });
 
-  $('#audioPlayer')[0].addEventListener("ended", function() {
-    console.log("ended event listener");});
+  //$('#audioPlayer')[0].addEventListener("ended", function() {
+  //  console.log("ended event listener");});
   $('#audioPlayer')[0].onended = function() {playNext()};
-  $('#audioPlayer').on("ended", function() {console.log("on ended");});
+  //$('#audioPlayer').on("ended", function() {console.log("on ended");});
        
 });
 
