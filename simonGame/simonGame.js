@@ -27,6 +27,10 @@ function playTune(tune)  {
 
 }
 
+function playNext() {
+  console.log("audio ended.  playing next");
+}
+
 function startGame() {
   console.log("playing game");
   if (IS_SIMON_TURN)  {
@@ -37,22 +41,36 @@ function startGame() {
       TUNE_SERIES.push(rand);
     }
     // play tune series
+    
+    var audioPlayer = $('#audioPlayer')[0];
+    audioPlayer.src = "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3";
+    audioPlayer.load();
+    audioPlayer.play();
+    /*
+    
+
     var j = 0;
+    var curAudio = $(`#audio${TUNE_SERIES[j]}`)[0];
+    curAudio.load()
+    curAudio.play();
+    curAudio.currentTime=0;
+
+    curAudio.onended = function(){ 
+      // play next
+      console.log(`audio ${j} has ended.`);
+      j++;
+      var nextAudio =  $(`#audio${TUNE_SERIES[j]}`)[0];
+      nextAudio.load()
+      nextAudio.play();
+      nextAudio.currentTime = 0;
+    };*/
+    /*
     while ( j < TUNE_SERIES.length )  {
       //var curAudio = $(`'audio[data-id]="${TUNE_SERIES[j]}"'`);
       var curAudio = $(`#audio${TUNE_SERIES[j]}`);
       console.log(`curAudio length = ${curAudio.length}`);
-      /*
-      curAudio.load()
-      curAudio.play();
-      curAudio.on("ended", function(){ 
-        // next
-        j++;
-        curAudio.currentTime=0;
-      });
-      */
       j++;
-    }
+    }*/
     /*TUNE_SERIES.forEach(function(tune)  {
       playTune(tune);
     });*/
@@ -118,6 +136,10 @@ $(document).ready(function() {
     console.log("Game cancelled.");
   });
 
+  $('#audioPlayer')[0].addEventListener("ended", function() {
+    console.log("ended event listener");});
+  $('#audioPlayer')[0].onended = function() {playNext()};
+  $('#audioPlayer').on("ended", function() {console.log("on ended");});
        
 });
 
