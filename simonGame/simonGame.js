@@ -24,6 +24,11 @@ var AUDIOS = [
   "https://cui.unige.ch/~chopard/joanna/simonGame/sound/xylophone-c2.mp3",
 ];
 
+window.jQuery = window.$ = require("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js");
+require("https://cdn.jsdelivr.net/npm/velocity-animate@2.0/velocity.min.js");
+// Optional: If you're using the UI pack, require it after Velocity. (You don't need to assign it to a variable.)
+require("https://cdn.jsdelivr.net/npm/velocity-animate@2.0/velocity.ui.min.js");
+
 function playNext() {
   console.log("audio ended.  playing next");
   if (PLAYLIST.length)  {
